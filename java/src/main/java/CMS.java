@@ -19,6 +19,8 @@ public class CMS {
 
     public void storeCmsSummaryReport() {
         System.out.println("Getting CMS data");
+        
+        // A Posts text fetch
         String postsText = "";
         try {
             URL postsUrl = new URL("https://jsonplaceholder.typicode.com/posts");
@@ -29,9 +31,11 @@ public class CMS {
             System.err.printf("No valid JSON response from CMS, error %s", ex.getMessage());
         }
 
+        // B Deserialise
         JSONArray posts = new JSONArray(postsText);
         System.out.printf("CMS data has %d records%n", posts.length());
 
+        // C Count/accumulate based on posts user IDs
         List<Integer> userIds = new ArrayList<>();
         for(int i = 0; i < posts.length(); i++) {
             JSONObject post = (JSONObject)posts.get(i);
@@ -41,11 +45,21 @@ public class CMS {
             }
         }
 
+        // Dump
         try(BufferedWriter writer = new BufferedWriter(new FileWriter(REPORT_FILE))) {
+            // D Retrieval
+            // Retrieve post length
             int postCount = posts.length();
+            // Retrieve user count
             int userCount = userIds.size();
+
+            // E Transform
+            // Transform into raw JSON string
             String summary = String.format("{ \"posts\": %d, \"users\": %d, \"mean_posts_per_user\": %d }",
                     postCount, userCount, Math.round((float)postCount / (float)userCount));
+            
+            // F Dump
+            // Dump JSON string
             writer.write(summary);
         } catch (IOException e) {
             System.err.printf("Unable to write report %s: %s%n",
