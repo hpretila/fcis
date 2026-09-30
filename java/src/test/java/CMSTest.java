@@ -40,4 +40,11 @@ public class CMSTest {
         JSONObject json = new JSONObject(Files.readString(REPORT_FILE.toPath()));
         assertEquals(100, json.getInt("posts"), "posts should be 100");
     }
+
+    /// Unit tests
+    // A -- patch with fixtures
+    // B Deserialise valid JSON
+    // C Take deserialised JSON and accumulate all unique user IDs
+    // D Retrieval validate against fixtures
+    // E Transform
 }
